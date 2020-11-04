@@ -1,112 +1,109 @@
 package com.kar;
 
-import com.algoexpert.bst.MyBST;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.IntStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Test {
-
     public static void main(String[] args) {
-        BST root = new BST(10);
-        root = root.insert(15);
-        root = root.insert(16);
-        root = root.insert(9);
-
-        System.out.println(root.contains(9));
-
-        root = root.remove(9);
-
-        System.out.println(root.contains(9));
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Karthik", 30);
+        map.put("Surekha", 27);
+        System.out.println(sortMapByValues(map));
     }
 
-    static class BST {
-        int value;
-        BST left;
-        BST right;
+    private static Map<String, Integer> sortMapByValues(Map<String, Integer> map){
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(map.entrySet());
+        entries.sort((o1,o2) -> o2.getValue().compareTo(o1.getValue()));
+        Map<String, Integer> resultMap = new HashMap<>();
+        for(Map.Entry<String, Integer> entry: entries)
+            resultMap.put(entry.getKey(), entry.getValue());
+        return resultMap;
+    }
 
-        BST(int value) {
-            this.value = value;
-        }
+    private static boolean searchStringInFile(String inputFilePath, String searchWord) throws IOException {
+        return Files.lines(Paths.get(inputFilePath)).parallel()
+                .anyMatch(line -> line.contains(searchWord));
+    }
 
-        public BST insert(int value) {
-            if (value < this.value) {
-                if (left != null)
-                    left.insert(value);
-                else
-                    left = new BST(value);
-            } else {
-                if (right != null)
-                    right.insert(value);
-                else
-                    right = new BST(value);
+    private static int getSecondHighestNum(int[] arr) {
+        int result = 0;
+        int highest = 0;
+        for(int n: arr) {
+            if (n > highest) {
+                result = highest;
+                highest = n;
+            } else if(n == highest){
+                // do nothing
+            } else if(n > result){
+                result = n;
             }
-
-            return this;
         }
+        return result;
+    }
 
-        public boolean contains(int value) {
-            BST currNode = this;
-            while (currNode != null) {
-                if (value < currNode.value)
-                    currNode = currNode.left;
-                else if (value > currNode.value)
-                    currNode = currNode.right;
-                else if (value == currNode.value)
-                    return true;
-            }
+    private static boolean compareArrays(int[] a, int[] b){
+        Set<Integer> nums = Arrays.stream(a)
+                            .boxed()
+                            .collect(Collectors.toSet());
+
+        for(int num: b)
+            if(nums.add(num))
+                return false;
+
+        return true;
+
+    }
+
+    private static String reverse(String s) {
+        char[] input = s.toCharArray();
+        char[] output = new char[input.length];
+
+        for(int i=0;i<input.length;i++)
+            output[i] = input[input.length - 1 - i];
+
+        return new String(output);
+    }
+
+    private static boolean isPrime(int num){
+        if(num == 1)
             return false;
-        }
 
-        public BST remove(int value){
-            remove(value, null);
-            return this;
-        }
+        for(int i=2; i*i<num; i++)
+            if(num%i == 0)
+                return false;
 
-        public void remove(int value, BST parentNode) {
-            BST currNode = this;
-
-            while(currNode != null){
-                if(value <  currNode.value){
-                    parentNode = currNode;
-                    currNode = currNode.left;
-                } else if (value > currNode.value){
-                    parentNode = currNode;
-                    currNode = currNode.right;
-                } else {
-                    if(currNode.left != null && currNode.right != null){
-                        currNode.value = currNode.right.getMinValue();
-                        currNode.right.remove(currNode.value, currNode);
-                    } else if(parentNode == null){
-                        if(currNode.left != null){
-                            currNode.value = currNode.left.value;
-                            currNode.right = currNode.left.right;
-                            currNode.left = currNode.left.left;
-                        } else if(currNode.right != null){
-                            currNode.value = currNode.right.value;
-                            currNode.left = currNode.right.left;
-                            currNode.right = currNode.right.right;
-                        } else{
-                            // One node tree
-                        }
-                    } else if(currNode == parentNode.left){
-                        currNode.left = currNode.left != null ? currNode.left : currNode.right;
-                    } else if(currNode == parentNode.right){
-                        currNode.right = currNode.left != null ? currNode.left : currNode.right;
-                    }
-                    break;
-                }
-            }
-        }
-
-        private int getMinValue() {
-            if (left == null)
-                return value;
-            else
-                return left.getMinValue();
-        }
+        return true;
     }
 
+    private static int fibonacci(int num){
+        if(num <= 1)
+            return num;
+
+        return fibonacci(num-1) + fibonacci(num-2);
+    }
+
+    private static boolean isPalindrome(String s){
+        s = s.toLowerCase();
+        char[] letters = s.toCharArray();
+
+        for(int i=0; i<letters.length; i++)
+            if(letters[i] != letters[letters.length - 1 - i])
+                return false;
+
+        return true;
+    }
+
+    private static String removeWhitespaces(String s){
+        StringBuilder sb = new StringBuilder();
+        char[] chars = s.toCharArray();
+
+        for(char c: chars)
+            if(c != ' ')
+                sb.append(c);
+
+        return sb.toString();
+    }
 }

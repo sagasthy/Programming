@@ -1,5 +1,7 @@
 package com.algoexpert.bst;
 
+import java.util.stream.IntStream;
+
 // Implement a BST with insert, search and remove operations
 public class MyBST {
     public static void main(String[] args) {
