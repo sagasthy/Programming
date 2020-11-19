@@ -1,7 +1,5 @@
 package com.kar;
 
-import sun.font.CreatedFontTracker;
-
 public class GCD {
 
     public static void main(String[] args) {
